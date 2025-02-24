@@ -1,1 +1,5 @@
 black
+matplotlib
+numpy
+scikit-learn
+kneed
