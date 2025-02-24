@@ -18,16 +18,16 @@ plt.show()
 sse = []
 
 for k in range(2, 11):
-  kmeans2 = KMeans(n_clusters=k, random_state=0)
-  kmeans2.fit(X)
-  sse.append(kmeans2.inertia_)
+    kmeans2 = KMeans(n_clusters=k, random_state=0)
+    kmeans2.fit(X)
+    sse.append(kmeans2.inertia_)
 
 
 plt.figure(figsize=(8, 6))
-plt.plot(range(2, 11), sse, marker='o')
-plt.title('Método do cóbado')
-plt.xlabel('Número de clusters (k)')
-plt.ylabel('Inertia ou SSE')
+plt.plot(range(2, 11), sse, marker="o")
+plt.title("Método do cóbado")
+plt.xlabel("Número de clusters (k)")
+plt.ylabel("Inertia ou SSE")
 plt.show()
 
 from kneed import KneeLocator
@@ -41,19 +41,18 @@ from sklearn.metrics import silhouette_score
 silhouette_coefficients = []
 
 for k in range(2, 11):
-     kmeans3 = KMeans(n_clusters=k)
-     kmeans3.fit(X)
-     score = silhouette_score(X, kmeans3.labels_)
-     silhouette_coefficients.append(score)
+    kmeans3 = KMeans(n_clusters=k)
+    kmeans3.fit(X)
+    score = silhouette_score(X, kmeans3.labels_)
+    silhouette_coefficients.append(score)
 
 
 plt.figure(figsize=(8, 6))
-plt.plot(range(2, 11), silhouette_coefficients, marker='o')
-plt.title('Silhouette Score')
-plt.xlabel('Número de clusters (k)')
-plt.ylabel('Silhouette')
+plt.plot(range(2, 11), silhouette_coefficients, marker="o")
+plt.title("Silhouette Score")
+plt.xlabel("Número de clusters (k)")
+plt.ylabel("Silhouette")
 plt.show()
-
 
 
 # Crea un modelo de K-Means con 4 clusters
@@ -73,16 +72,16 @@ y_kmeans = kmeans.predict(X)
 
 
 for i in range(5):
-  print(f'Punto {i}: {X[i]} no cluster {y_kmeans[i]}')
+    print(f"Punto {i}: {X[i]} no cluster {y_kmeans[i]}")
 
 np.unique(y_kmeans, return_counts=True)
 
-plt.scatter(X[:, 0], X[:, 1], c=y_kmeans, s=10, cmap='viridis')
+plt.scatter(X[:, 0], X[:, 1], c=y_kmeans, s=10, cmap="viridis")
 
 centers = kmeans.cluster_centers_
-plt.scatter(centers[:, 0], centers[:, 1], c='red', s=200, marker='x')
+plt.scatter(centers[:, 0], centers[:, 1], c="red", s=200, marker="x")
 
 centers
 
 labels = KMeans(7, random_state=0).fit_predict(X)
-plt.scatter(X[:, 0], X[:, 1], c=labels, s=50, cmap='managua')
+plt.scatter(X[:, 0], X[:, 1], c=labels, s=50, cmap="managua")
