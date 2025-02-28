@@ -16,15 +16,16 @@ plt.title("Dataset sintético de mostra")
 plt.show()
 
 sse = []
+k_range = range(2, 11)
 
-for k in range(2, 11):
+for k in k_range:
     kmeans2 = KMeans(n_clusters=k, random_state=0)
     kmeans2.fit(X)
     sse.append(kmeans2.inertia_)
 
 
 plt.figure(figsize=(8, 6))
-plt.plot(range(2, 11), sse, marker="o")
+plt.plot(k_range, sse, marker="o")
 plt.title("Método do cóbado")
 plt.xlabel("Número de clusters (k)")
 plt.ylabel("Inertia ou SSE")
@@ -32,7 +33,7 @@ plt.show()
 
 from kneed import KneeLocator
 
-kl = KneeLocator(range(2, 11), sse, curve="convex", direction="decreasing")
+kl = KneeLocator(k_range, sse, curve="convex", direction="decreasing")
 
 kl.elbow
 
@@ -40,7 +41,7 @@ from sklearn.metrics import silhouette_score
 
 silhouette_coefficients = []
 
-for k in range(2, 11):
+for k in k_range:
     kmeans3 = KMeans(n_clusters=k)
     kmeans3.fit(X)
     score = silhouette_score(X, kmeans3.labels_)
@@ -48,7 +49,7 @@ for k in range(2, 11):
 
 
 plt.figure(figsize=(8, 6))
-plt.plot(range(2, 11), silhouette_coefficients, marker="o")
+plt.plot(k_range, silhouette_coefficients, marker="o")
 plt.title("Silhouette Score")
 plt.xlabel("Número de clusters (k)")
 plt.ylabel("Silhouette")
@@ -81,7 +82,6 @@ plt.scatter(X[:, 0], X[:, 1], c=y_kmeans, s=10, cmap="viridis")
 centers = kmeans.cluster_centers_
 plt.scatter(centers[:, 0], centers[:, 1], c="red", s=200, marker="x")
 
-centers
-
-labels = KMeans(7, random_state=0).fit_predict(X)
+labels = KMeans(4, random_state=0).fit_predict(X)
 plt.scatter(X[:, 0], X[:, 1], c=labels, s=50, cmap="managua")
+plt.show()
