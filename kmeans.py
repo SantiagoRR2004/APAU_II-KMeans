@@ -36,18 +36,35 @@ class KMeans:
         self.cluster_centers_ = None
         self.inertia_ = None
 
-    def fit(self, X):
+    def fit(self, X: np.ndarray) -> None:
         """
         Aplica el algoritmo de entrenamiento de K-Means
-        :param X: puntos de datos
+
+        Args:
+            - X (np.ndarray): puntos de datos
+                Las filas son las instancias y
+                las columnas son las características
+
+        Returns:
+            - None
         """
         n_inter = 0
         centroids = self._initialize_centroids(X)
-        while n_inter < self.max_iter:
+
+        # Para el criterio de parada
+        oldCentroids = np.zeros_like(centroids)
+
+        # Bucle principal
+        while n_inter < self.max_iter and not np.array_equal(centroids, oldCentroids):
+
+            # Guardamos los centroides antiguos
+            oldCentroids = centroids
+
             labels = self._get_labels(X, centroids)
             centroids = self._update_centroids(X, labels, centroids)
             n_inter += 1
 
+        # Guardamos los resultados
         self.cluster_centers_ = centroids
         self.inertia_ = self._compute_inertia(X, labels, centroids)
         self.labels_ = labels
