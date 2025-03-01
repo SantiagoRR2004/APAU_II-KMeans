@@ -138,3 +138,21 @@ class KMeans:
             points = X[labels == i]
             inertia += np.sum(np.linalg.norm(points - centroids[i], axis=1))
         return inertia
+
+
+if __name__ == "__main__":
+    from sklearn.datasets import make_blobs
+
+    """
+    X, y_true = make_blobs(n_samples=300, centers=4, cluster_std=0.60, random_state=0)
+    kmeans = KMeans(k=2, max_iter=10, existed_initialization=False, random_seed=0)
+    kmeans.fit(X)
+    """
+    puntos = [(2, 5), (8, 4), (7, 5), (6, 4), (4, 9)]
+    clusters = [(2, 10), (5, 8), (1, 2)]
+    puntos = np.array(puntos)
+    clusters = np.array(clusters)
+    kmeans = KMeans(
+        n_clusters=3, max_iter=10, existed_initialization=False, random_state=0
+    )
+    print(kmeans._get_labels(puntos, clusters))
