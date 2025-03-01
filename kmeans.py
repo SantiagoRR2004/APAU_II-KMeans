@@ -4,15 +4,34 @@ import random
 
 class KMeans:
     def __init__(
-        self, n_clusters, max_iter=10, existed_initialization=False, random_state=0
-    ):
+        self,
+        n_clusters: int,
+        *,
+        max_iter: int = 10,
+        existed_initialization: bool = False,
+        random_state: int = 0,
+    ) -> None:
+        """
+        Initialize the KMeans object
+
+        Args:
+            - n_clusters (int): number of clusters
+            - max_iter (int): maximum number of iterations
+            - existed_initialization (bool): if True, centroids are initialized randomly
+            - random_state (int): random seed
+
+        Returns:
+            - None
+        """
         self.k = n_clusters
         self.max_iter = max_iter
         self.existed_initialization = existed_initialization
-        random.seed = random_state
+
+        # fijamos la semilla para obtener resultados reproducibles
+        random.seed(random_state)
         np.random.seed(random_state)
 
-        # atrubutos que se definen en el fit
+        # atributos que se definen en el fit
         self.labels_ = None
         self.cluster_centers_ = None
         self.inertia_ = None
