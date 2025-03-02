@@ -69,20 +69,33 @@ class KMeans:
         self.inertia_ = self._compute_inertia(X, labels, centroids)
         self.labels_ = labels
 
-    def predict(self, X):
+    def predict(self, X: np.ndarray) -> np.ndarray:
         """
         Aplica el algoritmo de predicción de K-Means
-        :param X: puntos de datos
-        :return: etiquetas de los puntos
+
+        Args:
+            - X (np.ndarray): puntos de datos
+                Las filas son las instancias y
+                las columnas son las características
+
+        Returns:
+            - np.ndarray: etiquetas de los puntos
         """
         labels = self._get_labels(X, self.cluster_centers_)
         return labels
 
-    def fit_predict(self, X):
+    def fit_predict(self, X: np.ndarray) -> np.ndarray:
         """
-        Aplica el algoritmo de entrenamiento y predicción de K-Means
-        :param X: puntos de datos
-        :return: etiquetas de los puntos
+        Entrena con los datos y después
+        predice las etiquetas de los mismos
+
+        Args:
+            - X (np.ndarray): puntos de datos
+                Las filas son las instancias y
+                las columnas son las características
+
+        Returns:
+            - np.ndarray: etiquetas de los puntos
         """
         self.fit(X)
         return self.predict(X)
