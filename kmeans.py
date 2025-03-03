@@ -191,9 +191,18 @@ class KMeans:
     def _get_labels(self, X: np.ndarray, centroids: np.ndarray) -> np.ndarray:
         """
         Calcula el centroide más cercano de cada punto
-        :param X: puntos de datos
-        :param centroids: centroides de los clusters
-        :return: etiquetas de los puntos
+
+        En caso de empate, se asigna el cluster con menos puntos.
+        Esto es horrible para la eficiencia, lo mejor es hacer
+        el mínimo con argmin y ya está.
+        Eso es mucho más paralelizable.
+
+        Args:
+            - X (np.ndarray): puntos de datos
+            - centroids (np.ndarray): centroides de los clusters
+
+        Returns:
+            - np.ndarray: etiquetas de los puntos
         """
         distances = self._compute_distance(X, centroids)
         labels = np.argmin(distances, axis=1)
@@ -202,13 +211,15 @@ class KMeans:
         for i in range(X.shape[0]):
             label = labels[i]
             current_distance = distances[i][label]
-            for j in range(label, self.k):
-                if distances[i, j] == current_distance:
-                    # comprobamos que cluster lleva menos elementos
-                    if np.sum(labels == j) < np.sum(labels == label):
-                        label = j
 
-            labels[i] = label
+            candidates = np.where(distances[i] == current_distance)[0]
+
+            if len(candidates) > 1:
+                counts = np.array(
+                    [np.sum(labels == candidate) for candidate in candidates]
+                )
+                best_candidate = candidates[np.argmin(counts)]
+                labels[i] = best_candidate
 
         return labels
 
