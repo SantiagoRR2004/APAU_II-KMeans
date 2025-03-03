@@ -1,5 +1,6 @@
 import numpy as np
 import random
+import tqdm
 
 
 class KMeans:
@@ -55,14 +56,18 @@ class KMeans:
         oldCentroids = np.zeros_like(centroids)
 
         # Bucle principal
-        while n_inter < self.max_iter and not np.array_equal(centroids, oldCentroids):
+        with tqdm.tqdm(total=self.max_iter, desc=f"{self.k}means") as pbar:
+            while n_inter < self.max_iter and not np.array_equal(
+                centroids, oldCentroids
+            ):
 
-            # Guardamos los centroides antiguos
-            oldCentroids = centroids
+                # Guardamos los centroides antiguos
+                oldCentroids = centroids
 
-            labels = self._get_labels(X, centroids)
-            centroids = self._update_centroids(X, labels, centroids)
-            n_inter += 1
+                labels = self._get_labels(X, centroids)
+                centroids = self._update_centroids(X, labels, centroids)
+                n_inter += 1
+                pbar.update(1)
 
         # Guardamos los resultados
         self.cluster_centers_ = centroids
