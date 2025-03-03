@@ -217,16 +217,16 @@ class KMeans:
     ) -> float:
         """
         Calcula la suma de las distancias de cada punto al centroide correspondiente
-        :param X: puntos de datos
-        :param labels: etiquetas de los puntos
-        :param centroids: centroides de los clusters
-        :return: suma de las distancias de los puntos al centroide correspondiente
+
+        Args:
+            - X (np.ndarray): puntos de datos
+            - labels (np.ndarray): etiquetas de los puntos
+            - centroids (np.ndarray): centroides de los clusters
+
+        Returns:
+            - float: suma de las distancias de los puntos al centroide correspondiente
         """
-        inertia = 0
-        for i in range(self.k):
-            points = X[labels == i]
-            inertia += np.sum(np.linalg.norm(points - centroids[i], axis=1))
-        return inertia
+        return np.sum(np.linalg.norm(X - centroids[labels], axis=1))
 
 
 if __name__ == "__main__":
