@@ -7,7 +7,7 @@ from sklearn.datasets import make_blobs
 
 X, y_true = make_blobs(n_samples=300, centers=4, cluster_std=0.60, random_state=0)
 
-X.shape
+print(f"The shape of X is {X.shape}")
 
 plt.scatter(X[:, 0], X[:, 1], s=10)
 plt.xlabel("Eixo X")
@@ -35,7 +35,7 @@ from kneed import KneeLocator
 
 kl = KneeLocator(k_range, sse, curve="convex", direction="decreasing")
 
-kl.elbow
+print(f"The elbow is at {kl.elbow}")
 
 from sklearn.metrics import silhouette_score
 
