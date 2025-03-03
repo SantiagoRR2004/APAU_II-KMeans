@@ -2,8 +2,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from kmeans import KMeans
+from kneed import KneeLocator
 
 from sklearn.datasets import make_blobs
+from sklearn.metrics import silhouette_score
 
 X, y_true = make_blobs(n_samples=300, centers=4, cluster_std=0.60, random_state=0)
 
@@ -16,12 +18,15 @@ plt.title("Dataset sintético de mostra")
 plt.show()
 
 sse = []
+silhouette_coefficients = []
 k_range = range(2, 11)
 
 for k in k_range:
     kmeans2 = KMeans(n_clusters=k, random_state=0)
     kmeans2.fit(X)
     sse.append(kmeans2.inertia_)
+    score = silhouette_score(X, kmeans2.labels_)
+    silhouette_coefficients.append(score)
 
 
 plt.figure(figsize=(8, 6))
@@ -31,21 +36,10 @@ plt.xlabel("Número de clusters (k)")
 plt.ylabel("Inertia ou SSE")
 plt.show()
 
-from kneed import KneeLocator
 
 kl = KneeLocator(k_range, sse, curve="convex", direction="decreasing")
 
 print(f"The elbow is at {kl.elbow}")
-
-from sklearn.metrics import silhouette_score
-
-silhouette_coefficients = []
-
-for k in k_range:
-    kmeans3 = KMeans(n_clusters=k)
-    kmeans3.fit(X)
-    score = silhouette_score(X, kmeans3.labels_)
-    silhouette_coefficients.append(score)
 
 
 plt.figure(figsize=(8, 6))
