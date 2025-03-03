@@ -50,8 +50,8 @@ plt.ylabel("Silhouette")
 plt.show()
 
 
-# Crea un modelo de K-Means con 4 clusters
-kmeans = KMeans(n_clusters=4)
+# Crea un modelo de K-Means con el número de clusters del codo
+kmeans = KMeans(n_clusters=kl.elbow)
 
 # Axustamos o modelo
 kmeans.fit(X)
@@ -78,4 +78,6 @@ plt.scatter(centers[:, 0], centers[:, 1], c="red", s=200, marker="x")
 
 labels = KMeans(4, random_state=0).fit_predict(X)
 plt.scatter(X[:, 0], X[:, 1], c=labels, s=50, cmap="managua")
+# Guardamos la figura
+plt.savefig("kmeans.png")
 plt.show()
