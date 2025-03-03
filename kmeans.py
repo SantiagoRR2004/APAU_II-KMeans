@@ -103,21 +103,43 @@ class KMeans:
     def _initialize_centroids(self, X: np.ndarray) -> np.ndarray:
         """
         Inicializa los centroides de los clusters
-        :param X: puntos de datos
-        :return: centroides de los clusters
+
+        Para esta función es importante el atributo
+        self.existed_initialization. Si es True, se
+        escogen aleatoriamente k puntos de X como centroides.
+        Si es false, se usa una distribución uniforme
+        para generar los centroides.
+
+        Nos aseguramos de que no haya centroides repetidos
+
+        Args:
+            - X (np.ndarray): puntos de datos
+
+        Returns:
+            - np.ndarray: centroides de los clusters
         """
         if self.existed_initialization:
             # escogemos aleaotoriamente k puntos de X como centroides
-            idx = np.random.choice(X.shape[0], self.k)
+            idx = np.random.choice(X.shape[0], self.k, replace=False)
             centroids = X[idx]
         else:
             # obtenemos los mínimos y máximos valores para cada atributo
             lower_bound = np.min(X, axis=0)
             upper_bound = np.max(X, axis=0)
-            # generamos los centroides aleatorios
-            centroids = np.random.uniform(
-                low=lower_bound, high=upper_bound, size=(self.k, X.shape[1])
-            )
+
+            # No queremos centroides repetidos
+            centroids = set()
+
+            # Generamos k centroides
+            while len(centroids) < self.k:
+                # Generamos un centroide aleatorio
+                centroid = np.random.uniform(
+                    low=lower_bound, high=upper_bound, size=(1, X.shape[1])
+                )
+                centroids.add(tuple(centroid[0]))
+
+            centroids = np.array(list(centroids))
+
         return centroids
 
     def _update_centroids(
