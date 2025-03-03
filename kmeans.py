@@ -147,27 +147,45 @@ class KMeans:
     ) -> np.ndarray:
         """
         Actualiza los centroides de los clusters
-        :param X: puntos de datos
-        :param labels: etiquetas de los puntos
-        :param centroids: centroides de los clusters
-        :return: centroides de los clusters
+
+        Si no hay puntos asignados a un cluster, el centroide
+        se mantiene igual.
+
+        Args:
+            - X (np.ndarray): puntos de datos
+            - labels (np.ndarray): etiquetas de los puntos
+            - centroids (np.ndarray): centroides antiguos de los clusters
+
+        Returns:
+            - np.ndarray: nuevos centroides de los clusters
         """
-        new_centroids = np.zeros(shape=(self.k, X.shape[1]))
-        for i in range(self.k):
-            # obtenemos los puntos de un cluster
-            points = X[labels == i]
-            if points.shape[0] > 0:
-                new_centroids[i] = np.mean(points, axis=0, dtype=np.float64)
-            else:  # caso en que no hay puntos de un cluster
-                new_centroids[i] = centroids[i]
+        new_centroids = np.array(
+            [
+                X[labels == i].mean(axis=0) if np.any(labels == i) else centroids[i]
+                for i in range(len(centroids))
+            ]
+        )
+
         return new_centroids
 
     def _compute_distance(self, X: np.ndarray, centroids: np.ndarray) -> np.ndarray:
-        distances = np.zeros((X.shape[0], self.k))
-        for i in range(self.k):
-            # calcula la distancia euclidiana entre los puntos y el centroide i
-            # la distancia es la norma euclideana de la diferencia entre los puntos y el centroide
-            distances[:, i] = np.linalg.norm(X - centroids[i], axis=1)
+        """
+        Calcula la distancia de cada punto a cada centroide
+
+        Usa la distancia euclidiana.
+
+        Args:
+            - X (np.ndarray): puntos de datos
+            - centroids (np.ndarray): centroides de los clusters
+
+        Returns:
+            - np.ndarray: matriz de distancias
+                Las filas son los puntos y
+                las columnas son los centroides
+        """
+        distances = np.array(
+            [np.linalg.norm(X - centroid, axis=1) for centroid in centroids]
+        ).T
         return distances
 
     def _get_labels(self, X: np.ndarray, centroids: np.ndarray) -> np.ndarray:
