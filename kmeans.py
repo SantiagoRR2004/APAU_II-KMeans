@@ -156,6 +156,14 @@ class KMeans:
         Si no hay puntos asignados a un cluster, el centroide
         se mantiene igual.
 
+        Esta función sería fácil de usar en una GPU,
+        ya que se pueden calcular los nuevos centroides
+        de forma paralela. Lo único complicado sería
+        la condicional de los clusters vacíos.
+        Se podría hacer que los calculase igualmente
+        (GPU) y después se hiciese las comprobaciones
+        en la CPU.
+
         Args:
             - X (np.ndarray): puntos de datos
             - labels (np.ndarray): etiquetas de los puntos
@@ -179,6 +187,10 @@ class KMeans:
 
         Usa la distancia euclidiana.
 
+        Esta función es la más fácilmente paralelizable
+        y el mayor problema sería si la GPU no es capaz de
+        contener todos los datos.
+
         Args:
             - X (np.ndarray): puntos de datos
             - centroids (np.ndarray): centroides de los clusters
@@ -200,7 +212,8 @@ class KMeans:
         En caso de empate, se asigna el cluster con menos puntos.
         Esto es horrible para la eficiencia, lo mejor es hacer
         el mínimo con argmin y ya está.
-        Eso es mucho más paralelizable.
+        Eso es mucho más paralelizable si solo calculamos las
+        distancias y cojemos el primer mínimo.
 
         Args:
             - X (np.ndarray): puntos de datos
@@ -233,6 +246,8 @@ class KMeans:
     ) -> float:
         """
         Calcula la suma de las distancias de cada punto al centroide correspondiente
+
+        Muy fácil de trasladar a una GPU o paralelizar en general.
 
         Args:
             - X (np.ndarray): puntos de datos
